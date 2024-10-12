@@ -75,5 +75,30 @@ public class TaskDAOWrapperImpl {
 			return list;
 		
 	}
+	
+	public TaskBean getTaskById(Integer id) {
+		Optional<TaskEntity> entity=taskdao.findById(id);
+		if(entity.isPresent()) {
+		TaskEntity ent=entity.get();
+		TaskBean bean=new TaskBean();
+		BeanUtils.copyProperties(ent, bean);
+		return bean;
+		}
+		else
+			return null;
+	}
+	
+	public TaskBean updateTask(TaskBean bean) {
+		Optional<TaskEntity>entity=taskdao.findById(bean.getTaskId());
+		if(entity.isPresent()) {
+			TaskEntity ent=new TaskEntity();
+			BeanUtils.copyProperties(bean, ent);;
+			TaskEntity updated=taskdao.save(ent);
+			BeanUtils.copyProperties(updated,bean);
+			return bean;
+		}
+		else
+			return null;
+	}
 
 }

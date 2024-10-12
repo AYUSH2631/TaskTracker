@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.consumertasktracker.beans.TaskBean;
@@ -26,6 +28,10 @@ public class ConsumertasktrackerApplication {
 		deleteTask(2);
 		System.out.println(".............................");
         getTaskByPriority("MEDIUM");
+		System.out.println(".............................");
+        getTaskById(2);
+		System.out.println(".............................");
+        updateTask();
 	}
 	
 	public static void getAllTask() throws Exception {
@@ -41,9 +47,13 @@ public class ConsumertasktrackerApplication {
 	public static void addTask() throws Exception {
 		
 		TaskBean request=new TaskBean("testing",Date.valueOf("2024-11-12"),"LOW","testing");
-	
+	    try {
 		TaskBean response=restTemplate.postForObject(REST_SERVICE_URI+"addTask", request, TaskBean.class);
 		System.out.println(response);
+	    }
+	    catch(Exception e) {
+	    	System.out.println("Please Enter Valid Details!!"+e.getMessage());
+	    }
 		
 		
 	}
@@ -69,6 +79,34 @@ public class ConsumertasktrackerApplication {
 		catch(Exception e) {
 			System.out.println("NO TASK WITH "+priority+" PRIORITY"+e.getMessage());
 		}
+	}
+	
+	public static void getTaskById(Integer id) {
+		try {
+		TaskBean response=restTemplate.getForObject(REST_SERVICE_URI+"getTaskById/"+id,TaskBean.class);
+		System.out.println(response);
+		}
+		catch(Exception e) {
+			System.out.println("NO TASK WITH ID "+id+"!!"+e.getMessage());
+		}
+	}
+	public static void updateTask() {
+		TaskBean request=new TaskBean(1,"test",Date.valueOf("2024-11-12"),"LOW","code");
+	    try {
+		restTemplate.put(REST_SERVICE_URI+"updateTask", request);
+		System.out.println("UPDATED SUCCESFULLY!!");
+	    }
+	    catch (HttpClientErrorException e) {
+	        // Check if the error is a 404 (not found) error
+	        if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+	            System.out.println("Task not found.");
+	        } else {
+	            System.out.println("Error updating task: " + e.getStatusCode() + " " + e.getResponseBodyAsString());
+	        }
+	    } catch (Exception e) {
+	        System.out.println("Please enter valid details: " + e.getMessage());
+	    }
+		
 	}
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.tasktracker.beans.TaskBean;
+import com.example.tasktracker.exception.TaskNotFoundException;
 import com.example.tasktracker.service.TaskService;
 
 import jakarta.validation.Valid;
@@ -76,6 +77,32 @@ public class TaskController {
 			return new ResponseEntity<List<TaskBean>>(list,HttpStatus.OK);
 		}
 		
+	}
+	@RequestMapping(value="/getTaskById/{id}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?>getTaskById(@PathVariable ("id")int id){
+		TaskBean bean=taskservice.getTaskById(id);
+		if(bean==null)
+			return (ResponseEntity<?>) ResponseEntity.notFound();
+		else
+			return new ResponseEntity<TaskBean>(bean,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/updateTask",method=RequestMethod.PUT,produces=MediaType.APPLICATION_JSON_VALUE,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?>updatetask(@Valid @RequestBody TaskBean bean,BindingResult result){
+		
+		if(result.hasErrors()) {
+			return ResponseEntity.badRequest().body(result.getAllErrors());
+
+		}
+		try {
+			TaskBean response=taskservice.updateTask(bean);
+			return new ResponseEntity<TaskBean>(response,HttpStatus.CREATED);
+		}
+		catch (TaskNotFoundException e) { 
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found with the given ID.");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+	    }
 	}
 
 }

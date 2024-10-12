@@ -37,6 +37,14 @@ public class TaskServiceImpl implements TaskService{
 		return taskserviceimpl.getTaskByPriority(priority);
 	}
 	
+	public TaskBean getTaskById(Integer id) {
+		return taskserviceimpl.getTaskById(id);
+	}
+	
+	public TaskBean updateTask(TaskBean bean) {
+		return taskserviceimpl.updateTask(bean);
+	}
+	
 
 
 }

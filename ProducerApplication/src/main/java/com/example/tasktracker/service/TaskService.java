@@ -12,5 +12,7 @@ public interface TaskService {
 	TaskBean addTask(TaskBean bean);
 	Optional<TaskBean>deleteTask(Integer id);
 	List<TaskBean>getTaskByPriority(String priority);
+	TaskBean getTaskById(Integer id);
+	TaskBean updateTask(TaskBean bean);
 
 }
