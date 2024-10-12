@@ -13,7 +13,7 @@ The **Task Tracker Application** is a backend service designed to help users man
 - **Java**: The primary programming language for backend development.
 - **Spring Boot**: Framework utilized for building the RESTful API and managing application configurations.
 - **Spring Data JPA**: For handling data persistence and interactions with the database.
-- **H2 Database**: An in-memory database used for development and testing, providing quick access to task data.
+- ** Database**: An in-memory database used for development and testing, providing quick access to task data.
 - **Maven**: Dependency management and build automation tool.
 
 The application serves as a solid foundation for task management features, making it suitable for integration with frontend applications or as part of larger systems. It emphasizes good software design principles, making it easy to extend and maintain.
